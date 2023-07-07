@@ -25,5 +25,10 @@ namespace SignalR_Auction.Repositories
             var auction = auctions.Single(a => a.Id == auctionId);
             auction.CurrentBid = newBid;
         }
+        public void AddAuction(Auction auction)
+        {
+            auction.Id = auctions.Max(a => a.Id) + 1;
+            auctions.Add(auction);
+        }
     }
 }

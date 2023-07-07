@@ -6,5 +6,6 @@ namespace SignalR_Auction.Repositories
     {
         IEnumerable<Auction> GetAll();
         void NewBid(int auctionId, int newBid);
+        void AddAuction(Auction auction);
     }
 }

@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.SignalR;
 using SignalR_Auction.Hubs;
+using SignalR_Auction.Models;
 using SignalR_Auction.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +35,12 @@ app.MapControllerRoute(
 app.MapPost("auction/{auctionId}/newbid", (int auctionId, int currentBid, IAuctionRepo auctionRepo) =>
 {
     auctionRepo.NewBid(auctionId, currentBid);
+});
+
+app.MapPost("auction", (Auction auction, IAuctionRepo auctionRepo, IHubContext<AuctionHub> hubContext) =>
+{
+    auctionRepo.AddAuction(auction);
+    hubContext.Clients.All.SendAsync("ReceiveNewAuction", auction);
 });
 
 app.MapHub<AuctionHub>("/auctionhub");
