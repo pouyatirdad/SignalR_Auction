@@ -25,6 +25,12 @@
                             </tr>`;
     });
 
+    connection.on("NotifyOutbid", ({ auctionId }) => {
+        const tr = document.getElementById(auctionId + "-tr");
+        if (!tr.classList.contains("outbid"))
+            tr.classList.add("outbid");
+    });
+
     connection.start().catch((err) => {
         return console.error(err.toString());
     });
@@ -35,6 +41,9 @@
 const connection = InitializeSignalRConnection();
 
 const submitBid = (auctionId) => {
+    const tr = document.getElementById(auctionId + "-tr");
+    tr.classList.remove("outbid");
+
     const bid = document.getElementById(auctionId + "-input").value;
     fetch("/auction/" + auctionId + "/newbid?currentBid=" + bid, {
         method: "POST",
@@ -42,8 +51,6 @@ const submitBid = (auctionId) => {
             'Content-Type': 'application/json'
         }
     });
-    if (connection.state !== signalR.HubConnectionState.Connected)
-        location.reload();
     connection.invoke("NotifyNewBid", { auctionId: parseInt(auctionId), newBid: parseInt(bid) });
 }
 
