@@ -54,6 +54,11 @@ const submitBid = (auctionId) => {
             'Content-Type': 'application/json'
         }
     });
+
+    if (!connection.state === "Connected") {
+        location.reload();
+    }
+
     connection.invoke("NotifyNewBid", { AuctionId: parseInt(auctionId), NewBid: parseInt(bid) });
 }
 
