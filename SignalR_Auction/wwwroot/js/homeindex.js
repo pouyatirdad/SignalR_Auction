@@ -1,6 +1,7 @@
 ﻿const InitializeSignalRConnection = () => {
     var connection = new signalR.HubConnectionBuilder()
         .withUrl("/auctionHub")
+        .withAutomaticReconnect()
         .withHubProtocol(new signalR.protocols.msgpack.MessagePackHubProtocol())
         .build();
 
